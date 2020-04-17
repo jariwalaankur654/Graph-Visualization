@@ -1,0 +1,137 @@
+body{
+	background-color: #FCF6F5;
+	font-family: verdana;
+}
+
+.header{
+	background-color: #2BAE66;	
+	padding: 1px;
+	margin: 20px;
+}
+
+.header img{
+	float: left;
+	height: 70px;	
+	padding: 5px;
+}
+.header h1{			
+	text-align: center; 		
+	letter-spacing: 3px;
+	color: #FCF6F5;
+}	
+
+.nav{
+	padding: 1px;
+	margin: 20px;	
+}
+
+.nav a{
+	background: #ccc;			
+	padding: 12px;
+	text-align: center;
+	float: right;
+  	text-decoration: none;
+  	color: black;
+}
+
+.nav a:hover {
+  	background-color: #2BAE66;
+  	color: #FCF6F5;
+}
+
+.menubar{
+	padding: 1px;
+	margin: 20px;	
+}
+
+.menubar label{
+	background-color: #2BAE66;
+  	color: #FCF6F5;  
+  	padding: 12px;		
+  	float: left;
+  	width: 100px;	
+  	text-align: center;
+  	margin-right: 20px; 
+  	margin-left: 20px; 
+}
+
+.menubar button{
+	background: #ccc;			
+	padding: 12px;
+	text-align: center;
+	float: left;
+  	text-decoration: none;
+  	color: black;
+  	border: none;
+  	margin-right: 10px; 
+  	outline: none;
+  	font-size: 16px;
+}
+
+.menubar button:hover {
+  	background-color: #2BAE66;
+  	color: #FCF6F5;
+}
+
+.menubar select{
+	background: #ccc;			
+	padding: 12px;
+	text-align: center;
+	float: left;
+  	font-size: 16px;
+  	color: black;
+  	border: none;
+  	margin-right: 10px; 
+  	outline: none;
+  	min-width: 200px;
+}
+
+.menubar option{
+	background-color: #2BAE66;
+  	color: #FCF6F5; 
+}
+
+.main1{
+	border: 1px solid black;
+	height: 400px;
+	width: 95%;
+	background-color: white;
+	padding: 10px;
+	margin: 20px;
+	overflow: scroll;
+
+}
+
+.main2{
+	border: 1px solid black;
+	height: 200px;
+	width: 95%;
+	background-color: white;
+	padding: 10px;
+	margin: 20px;
+	overflow: scroll;
+}
+
+
+.taskbar{
+	padding: 1px;
+	margin: 20px;
+}
+
+.taskbar button{
+	background: #ccc;			
+	padding: 12px;
+	text-align: center;
+	float: left;
+  	text-decoration: none;
+  	color: black;
+  	border: none;
+  	margin-right: 10px; 
+  	outline: none;
+  	font-size: 16px;
+}
+
+.taskbar button:hover {
+  	background-color: #2BAE66;
+  	color: #FCF6F5;
+}
