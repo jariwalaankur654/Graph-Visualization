@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Graph1</title>
+	<style type="text/css">
+		.canvasDiv{
+			max-height: 700px;
+			max-width: 800px;			
+			overflow: scroll;
+		}
+	</style>
+</head>
+<body>
+	<form>
+	<select id="selectGraph" required>
+		<option hidden>Select a Graph</option>
+		<option value="1"><label>Directed Graph</label></option>
+		<option value="0"><label>Undirected Graph</label></option>		
+	</select>
+	</form>
+
+	<div class="canvasDiv">
+		<canvas id="myCanvas" width="800" height="700" style="border:1px solid #d3d3d3;">		
+		</canvas>
+	</div>
+	<br>
+	<button id="CreateGraph" onclick="CreateGraph()">Create Graph</button>
+
+	<script>
+		var R = 325;
+
+		var num = 6;	
+		var r = 255;
+		var position = 350;				
+		var inner_radius1 = 12;
+		var inner_radius2 = 15;
+
+		var pos_array = new Array(num); 
+		for (var i = 0; i < num; i++) { 
+			pos_array[i] = []; 
+		}
+
+		var p1 = new Array(num); 
+		for (var i = 0; i < num; i++) { 
+			p1[i] = []; 
+		} 
+
+		var p2 = new Array(num); 
+		for (var i = 0; i < num; i++) { 
+			p2[i] = []; 
+		} 
+
+		function CreateGraph()
+		{
+			var char = 65;
+			var canvas = document.getElementById("myCanvas");
+			var context = canvas.getContext('2d');
+			context.clearRect(0,0,canvas.width,canvas.height);
+		
+			var point = num;
+			var angles = 2 * Math.PI /point;				
+			
+			for(var i=1;i<=point;i++)
+			{
+				var angle;
+				angle = angles * i;				
+				
+				pos_array[i-1][0] = position + (r * Math.cos(angle));	
+				pos_array[i-1][1] = position + (r * Math.sin(angle));	
+				
+				var x = (position + (R * Math.cos(angle)));
+				var y = (position + (R * Math.sin(angle)));
+
+				var ang = 0.5 * Math.PI / 6;
+
+				p1[i-1][0] = (position + (R * Math.cos(angle-ang)));
+				p1[i-1][1] = (position + (R * Math.sin(angle-ang)));
+
+				p2[i-1][0] = (position + (R * Math.cos(angle+ang)));
+				p2[i-1][1] = (position + (R * Math.sin(angle+ang)));
+			}
+
+			var data_array = new Array(num); 
+			for (var i = 0; i < num; i++) { 
+				data_array[i] = []; 
+			} 
+
+			for (var i = 0; i < num; i++) 
+			{ 
+				for (var j = 0; j < num; j++) 
+				{ 					
+					data_array[i][j] = 1; 	
+				} 
+			} 
+
+			for (var i = 0; i < num; i++) 
+			{
+				for (var j = 0; j < num; j++) 
+				{			
+					if(data_array[i][j]==1)
+					{	
+						if(i==j)
+						{
+							var c1 = document.getElementById("myCanvas");
+							var ctx1 = c1.getContext("2d");
+							ctx1.beginPath();
+							ctx1.moveTo(pos_array[i][0], pos_array[i][1]);
+							ctx1.bezierCurveTo(p1[i][0] , p1[i][1], p2[i][0], p2[i][1] , pos_array[i][0], pos_array[i][1]);
+							ctx1.stroke();
+
+
+							var select = document.getElementById("selectGraph");
+
+							if(select.value == 1)
+							{
+								var angle1 = Math.atan((pos_array[j][1]-p1[i][1])/(pos_array[j][0]-p1[i][0]));
+								
+								var xa = pos_array[j][0] + inner_radius1 * Math.cos(angle1);
+								var ya = pos_array[j][1] + inner_radius1 * Math.sin(angle1);
+
+								var angle2 = Math.PI / 12;
+
+								var a1 = pos_array[j][0] + 20 * Math.cos(angle1-angle2);
+								var b1 = pos_array[j][1] + 20 * Math.sin(angle1-angle2);
+								var c1 = pos_array[j][0] + 20 * Math.cos(angle1+angle2);
+								var d1 = pos_array[j][1] + 20 * Math.sin(angle1+angle2);
+
+								var dist2 = Math.hypot(position - xa, position - ya);
+
+								if(dist2<250)
+								{
+									xa = pos_array[j][0] - inner_radius1 * Math.cos(angle1);
+									ya = pos_array[j][1] - inner_radius1 * Math.sin(angle1);
+
+									a1 = pos_array[j][0] - 20 * Math.cos(angle1-angle2);
+									b1 = pos_array[j][1] - 20 * Math.sin(angle1-angle2);
+									c1 = pos_array[j][0] - 20 * Math.cos(angle1+angle2);
+									d1 = pos_array[j][1] - 20 * Math.sin(angle1+angle2);
+
+								}							
+								
+								var c2 = document.getElementById("myCanvas");
+								var ctx2 = c2.getContext("2d");
+								ctx2.beginPath();		
+								ctx2.moveTo(xa,ya);
+								ctx2.lineTo(a1,b1);						
+								ctx2.lineTo(c1,d1);					
+								ctx2.fill();
+								ctx2.stroke();
+							}
+							
+						}	
+						else
+						{
+							var c = document.getElementById("myCanvas");
+							var ctx1 = c.getContext("2d");
+							ctx1.beginPath();
+							ctx1.moveTo(pos_array[i][0],pos_array[i][1]);
+							ctx1.lineTo(pos_array[j][0],pos_array[j][1]);
+							ctx1.stroke();	
+
+							var select = document.getElementById("selectGraph");
+
+							if(select.value == 1)
+							{
+								var angle1 = Math.atan((pos_array[j][1]-pos_array[i][1])/(pos_array[j][0]-pos_array[i][0]));
+
+								var xa = pos_array[j][0] + inner_radius1 * Math.cos(angle1);
+								var ya = pos_array[j][1] + inner_radius1 * Math.sin(angle1);
+
+								var angle2 = Math.PI / 12;
+
+								var a1 = pos_array[j][0] + 20 * Math.cos(angle1-angle2);
+								var b1 = pos_array[j][1] + 20 * Math.sin(angle1-angle2);
+								var c1 = pos_array[j][0] + 20 * Math.cos(angle1+angle2);
+								var d1 = pos_array[j][1] + 20 * Math.sin(angle1+angle2);
+
+								var dist1 = Math.hypot(pos_array[j][0] - pos_array[i][0], pos_array[j][1] - pos_array[i][1]);
+
+								var dist2 = Math.hypot(pos_array[i][0] - xa, pos_array[i][1] - ya);
+
+								if(dist1 < dist2)
+								{
+									xa = pos_array[j][0] - inner_radius1 * Math.cos(angle1);
+									ya = pos_array[j][1] - inner_radius1 * Math.sin(angle1);				
+
+									a1 = pos_array[j][0] - 20 * Math.cos(angle1-angle2);
+									b1 = pos_array[j][1] - 20 * Math.sin(angle1-angle2);
+
+									c1 = pos_array[j][0] - 20 * Math.cos(angle1+angle2);
+									d1 = pos_array[j][1] - 20 * Math.sin(angle1+angle2);
+								}
+
+								var ctx2 = c.getContext("2d");
+								ctx2.beginPath();		
+								ctx2.moveTo(xa,ya);
+								ctx2.lineTo(a1,b1);						
+								ctx2.lineTo(c1,d1);					
+								ctx2.fill();
+								ctx2.stroke();
+							}
+
+							
+						}						
+					} 
+				}
+			}
+
+			for(var i=0;i<num;i++)
+			{
+				var x = pos_array[i][0];			
+				
+				var y = pos_array[i][1];
+				
+
+				var c = document.getElementById("myCanvas");
+				var ctx = c.getContext("2d");
+				ctx.beginPath();
+				ctx.arc(x, y, inner_radius1, 0, 2 * Math.PI);
+				ctx.fillStyle = 'white';
+				ctx.fill();
+				ctx.stroke();
+				ctx.beginPath();
+				ctx.font = inner_radius2+"px Verdana";				
+				ctx.fillStyle = 'black';
+				ctx.fillText(String.fromCharCode(char), (x-5), (y+5));
+				char++;
+
+				if(char == 91)
+				{
+					char = 97;		
+				}
+				else if(char == 123)
+				{
+					char = 48;				
+				}
+			}			
+
+		}
+
+	</script> 
+	
+</body>
+</html>

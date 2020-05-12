@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Graph0</title>
+</head>
+<body>
+	<div class="canvasDiv">
+		<canvas id="myCanvas" width="700" height="700" style="border:1px solid #c1c1c1;">		
+		</canvas>
+	</div>
+
+	<script type="text/javascript">
+		
+		/*var c0 = document.getElementById("myCanvas");
+		var ctx0 = c0.getContext("2d");
+		ctx0.beginPath();			
+		ctx0.moveTo(350,0);
+		ctx0.lineTo(350,700);
+		ctx0.stroke();
+
+		var c1 = document.getElementById("myCanvas");
+		var ctx1 = c1.getContext("2d");
+		ctx1.beginPath();			
+		ctx1.moveTo(0,350);
+		ctx1.lineTo(700,350);
+		ctx1.stroke();
+
+		var c2 = document.getElementById("myCanvas");
+		var ctx2 = c2.getContext("2d");		
+		ctx2.beginPath();
+		ctx2.arc(350, 350, 250, 0, 2 * Math.PI);
+		ctx2.stroke();*/
+
+		char = 65;
+		var r = 250;
+		var point = 12;
+
+		var angles = 2*Math.PI/point;	
+
+		for(var i=1;i<=point;i++)
+		{
+			var angle;
+			angle = angles * i;
+			
+			var x = 350 + r * Math.cos(angle);
+			var y = 350 + r * Math.sin(angle);			
+
+			var c = document.getElementById("myCanvas");
+			var ctx = c.getContext("2d");
+			ctx.beginPath();
+			ctx.arc(x, y, 20, 0, 2 * Math.PI);
+			ctx.stroke();
+			ctx.font = "16px Verdana";				
+			ctx.fillText(String.fromCharCode(char), (x-5), (y+5));
+			char++;
+		}
+		
+
+
+	</script>
+
+</body>
+</html>
