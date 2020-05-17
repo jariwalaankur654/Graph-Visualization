@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pic</title>
+	<style type="text/css">
+		
+		.image{
+			position: relative;
+			display: inline-block;
+		}
+
+		.text{
+			opacity: 0;
+			position: absolute;
+	        z-index: 999;
+	        margin: 0 auto;
+	        left: 0;
+	        right: 0;
+	        top: 40%; 
+	        text-align: center;
+	        width: 60%;
+		}
+
+		.image:hover .text{
+			display: inline-block;	
+			background: rgba(0,0,0,0.5);
+		}
+
+	</style>
+</head>
+<body>
+
+	<div class="image">
+		<img src="../img/ankur-pic.jpg" height="250">
+		<div class="text">
+			<h3>Ankur Jariwala</h3>
+			<h4>STUDENT</h4>
+		</div>
+	</div>
+
+</body>
+</html>
