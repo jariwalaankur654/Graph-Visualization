@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Creating graph from incidence matrix</title>
+        <meta name="description" content="Creating graph from incidence matrix online and see visual result" />        <meta name="keywords" content="graph online, plot graph, creating graph from incidence matrix, incidence matrix" />
+        <meta http-equiv="cleartype" content="on">
+        <script src="../JS/jquery-2.0.3.js" ></script>
+		<link rel="stylesheet" charset="UTF-8" type="text/css" href="../css/style1.css" />
+        <link rel="stylesheet" type="text/css" href="../CSS/style.css">
+        <link rel="stylesheet" type="text/css" href="../CSS/Home.css">
+        <style>
+          .draw-area{
+            text-align: center;
+            float:left;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+          }
+
+          .draw-area .draw-page{
+            background: white;
+            margin: auto;
+            height: 100%;
+            width: 60%;
+            padding: 8px;
+            border: 1px solid black;
+            border-radius: 10px;
+          }
+
+          .draw-area .draw-page label{
+            margin: 10px;
+          }
+          .ti{
+            background: grey;
+            color: white;
+          }
+          .ta{
+            float:left;
+          }
+        </style>
+	    <script src="../JS/Graph.js"></script>
+    </head>
+    <body>
+      <div class="top">
+    		<div class="top-left">
+    			<img src="../Img/icon.png">
+    			<div class="text">Graph Visualization</div>
+    		</div>
+    		<div class="top-right">
+          <button type="button"  onclick="window.location.href='/project/HTML/about.html'">ABOUT</button>
+    			<button type="button"  onclick="window.location.href='/project/HTML/Theory.html'">THEORY</button>
+    			<button type="button"  onclick="window.location.href='/project/HTML/first.html'">HOME</button>
+
+    		</div>
+    	</div>
+
+
+      <div class="draw-area">
+        <div class="draw-page">
+          <div class="content">
+
+
+<script>
+
+// Current matrix size
+var g_MatrixWidth  = 2;
+var g_MatrixHeight = 3;
+
+function PackMatrix()
+{
+    var matrix = "";
+
+    for (i = 0; i < g_MatrixHeight; i++)
+    {
+        for (j = 0; j < g_MatrixWidth; j++)
+        {
+            var element = document.getElementsByName("field" + i + j)[0];
+            matrix = matrix + (element.value.length > 0 ? element.value : "0") + ", ";
+        }
+        matrix = matrix + "\n";
+    }
+    return matrix;
+}
+
+function CopyMatrixToTextInput()
+{
+    document.getElementById("IncidenceMatrixFieldPage").value = PackMatrix();
+}
+
+function _ShowTextInput()
+{
+    $( "#IncidenceMatrixFieldPage" ).show();
+    $( "#MatrixForm" ).hide();
+    $( "#TextDescription").show();
+    $( "#MatrixDescription").hide();
+}
+
+function _ShowMatrixInput()
+{
+    $( "#MatrixForm" ).show();
+    $( "#IncidenceMatrixFieldPage" ).hide();
+    $( "#TextDescription").hide();
+    $( "#MatrixDescription").show();
+}
+
+function ShowTextInput()
+{
+    _ShowTextInput();
+    document.getElementById("showMatrix").className = "btn btn-default";
+    document.getElementById("showText").className = "btn btn-default active";
+}
+
+function ShowMatrixInput()
+{
+    _ShowMatrixInput();
+    document.getElementById("showMatrix").className = "btn btn-default active";
+    document.getElementById("showText").className = "btn btn-default";
+}
+
+
+
+function CopyMatrixToMatrixInput()
+{
+    var graph = new Graph();
+
+    var colsObj = {};
+    var rowsObj = {};
+
+    if (graph.TestIncidenceMatrix($( "#IncidenceMatrixFieldPage" ).val(), rowsObj, colsObj))
+    {
+        var rows = rowsObj.rows;
+        var cols = colsObj.cols;
+
+        for (var i = g_MatrixWidth; i < cols[0].length; i++)
+        {
+            IncSizeW();
+        }
+
+        for (var i = g_MatrixHeight; i < cols.length; i++)
+        {
+            IncSizeH();
+        }
+
+        for (var i = 0; i < cols.length; i++)
+        {
+            for (var j = 0; j < cols[0].length; j++)
+            {
+                var element = document.getElementsByName("field" + i + j)[0];
+                element.value = cols[i][j];
+            }
+        }
+    }
+    else
+    {
+        ShowTextInput();
+    }
+}
+
+function CreateInputElement(col, row)
+{
+    var input = document.createElement("input");
+    input.type = "text";
+    input.size = 3;
+    input.name = "field" + col + row;
+    input.value = 0;
+    input.onkeyup = function() {CopyMatrixToTextInput();};
+
+    return input;
+}
+
+function InsertBeforeElement(element, beforeName, space)
+{
+    var parent = document.getElementsByName(beforeName)[0].parentNode;
+    var beforeElement = document.getElementsByName(beforeName)[0];
+    parent.insertBefore(element, beforeElement);
+
+    if (space)
+    {
+        // Insert space
+        parent.insertBefore(document.createTextNode( '\u00A0' ), beforeElement);
+    }
+}
+
+function IncSizeW()
+{
+    // End one more line:
+    for (var i = 0; i < g_MatrixHeight; i ++)
+    {
+        var input = CreateInputElement(i, g_MatrixWidth);
+        InsertBeforeElement(input, "row" + i, true);
+        //InsertBeforeElement(input, "matrixEnd", true);
+    }
+
+    g_MatrixWidth++;
+    CopyMatrixToTextInput();
+}
+
+function IncSizeH()
+{
+    var br = document.createElement("br");
+    br.setAttribute("name", "row" + g_MatrixHeight);
+    InsertBeforeElement(br, "matrixEnd", false);
+
+    for (var i = 0; i < g_MatrixWidth; i ++)
+    {
+        var input = CreateInputElement(g_MatrixHeight, i);
+        InsertBeforeElement(input, "row" + g_MatrixHeight, true);
+    }
+    g_MatrixHeight++;
+    CopyMatrixToTextInput();
+}
+
+window.onload = function ()
+{
+	if (document.getElementById('CreateByIncidenceMatrix'))
+	{
+		document.getElementById('CreateByIncidenceMatrix').onclick = function ()
+		{
+            // $("#matrixForm").submit();
+			window.location = "./first.html?incidenceMatrix=" + $( "#IncidenceMatrixFieldPage" ).val().replace(/\n/g,'%0A');
+	  	}
+        }
+
+	$( "#IncidenceMatrixFieldPage" ).on('keyup change', function (eventObject)
+		{
+			var graph = new Graph();
+
+			if (!graph.TestIncidenceMatrix($( "#IncidenceMatrixFieldPage" ).val(), [], []))
+			{
+				$( "#BadFormatMessage" ).show();
+			}
+			else
+			{
+				$( "#BadFormatMessage" ).hide();
+			}
+		});
+
+		$( "#BadFormatMessage" ).hide();
+            $( "#IncidenceMatrixFieldPage" ).hide();
+
+    $( "#showMatrix" ).on('click', function (eventObject)
+                          {
+                          _ShowMatrixInput();
+                          });
+
+    $( "#showText" ).on('click', function (eventObject)
+                        {
+                        _ShowTextInput();
+                        });
+
+    CopyMatrixToMatrixInput();
+
+}
+</script>
+
+<div class="ti">
+    <h1>Creating graph from incidence matrix</h1>
+    <p><p>On this page you can enter incidence matrix and Export graph</p>
+</p>
+</div>
+
+    <div>
+		<form>
+		<fieldset>
+				<div id="message" class="alert alert-success" role="alert" style="height:64px">
+                    <p id="TextDescription" style="display: none;">Enter incidence matrix. Use comma "," as separator and press "Export Graph".</p>
+                    <p id="MatrixDescription">Enter incidence matrix. Press "Export Graph" to plot.</p>
+                </div>
+
+				<div class="row">
+				<div class="col-md-6">
+
+<form>
+<div class="btn-group" data-toggle="buttons">
+<label class="btn btn-default active" id="showMatrix"><input type="radio" name="matrixInputType"> Enter to table</label>
+<label class="btn btn-default" id="showText"><input type="radio" name="matrixInputType"> Enter as text</label>
+</div>
+</form>
+
+<form action="./" method="post" id="matrixForm">
+				<textarea name="incidenceMatrix" id="IncidenceMatrixFieldPage" wrap="off" style="display: none;">
+0, 0
+0, 0
+0, 0
+</textarea>
+</form>
+<div id="MatrixForm">
+<form id="AdjacencyMatrixFieldInput" role="form">
+<input type="text" name="field00" size="3" value = "0" onkeyup="CopyMatrixToTextInput()">
+<input type="text" name="field01" size="3" value = "0" onkeyup="CopyMatrixToTextInput()">
+<br name="row0">
+
+<input type="text" name="field10" size="3" value = "0" onkeyup="CopyMatrixToTextInput()">
+<input type="text" name="field11" size="3" value = "0" onkeyup="CopyMatrixToTextInput()">
+<br name="row1">
+
+<input type="text" name="field20" size="3" value = "0" onkeyup="CopyMatrixToTextInput()">
+<input type="text" name="field21" size="3" value = "0" onkeyup="CopyMatrixToTextInput()">
+<br name="row2">
+
+<span name="matrixEnd"></span>
+</form>
+<button type="button" onclick="IncSizeW()" value="add" name="add" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>
+Add edge</button>
+<button type="button" onclick="IncSizeH()" value="add" name="add" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>
+Add node</button>
+</div>
+
+<hr>
+<p>
+  <h1 class="ti">Click to Export<h1>
+</p>
+
+
+		  		<button type="button" class="btn btn-default btn-lg" id="CreateByIncidenceMatrix"><span class="glyphicon glyphicon-th"></span> Export graph</button>
+				<div id="BadFormatMessage" class="alert alert-warning" role="alert">
+					Matrix is incorrect. Use comma "," as separator. Matrix should be square.				</div>
+				</div>
+        <div class="col-md-6">
+          <h1 align = "left"> Incidence Matrix : </h1>
+		  		<p align = "left">An incidence matrix is a matrix that shows the relationship between two classes of objects. If the first class is X and the second is Y, the matrix has one row for each element of X and one column for each element of Y. The entry in row x and column y is 1 if x and y are related (called incident in this context) and 0 if they are not. </p>
+          <h1 align="left"><b>Note :</b></h1>
+          <h4 align="left">Sum of each column is always equal to 2 or 0.</h4>
+        </div>
+        </div>
+		</fieldset>
+		</form>
+    </div>
+                 </div>
+      </div>
+    </div>
+	<script>
+		if (typeof preLoadPage == 'function')
+		{
+			preLoadPage();
+		}
+	</script>
+	<script src="../JS/bootstrap3/bootstrap.min.js" >
+        	        $('.dropdown-toggle').dropdown();
+	</script>
+	<script>
+		if (typeof postLoadPage == 'function')
+		{
+			postLoadPage();
+		}
+	</script>
+    </body>
+</html>

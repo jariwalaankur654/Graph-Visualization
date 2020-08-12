@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DFS</title>
+	<style type="text/css">
+		*{
+			padding: 0;
+			margin: 0;
+			font-family: verdana;
+		}
+		.main{
+			width: 100%;
+			height: 750px;
+		}
+		.left{
+			width: 60%;
+			height: 100%;
+			float: left;
+			
+		}
+		.left select{
+			margin: 10px;
+			padding: 5px;
+		}
+
+		.left #notes{
+			display: none;
+			margin: 10px;
+			padding: 5px;
+		}
+
+		#myCanvas{
+			margin-right: 20px;
+			margin-left: 30px;
+		}
+		.right{
+			width: 40%;
+			height: 100%;
+			float: left;
+		}
+		.right input,button{
+			margin: 10px;
+			padding: 5px;
+		}
+		#ans{
+			width: 100%;
+			height: 90%;
+		}
+	</style>
+</head>
+<body>
+	<div class="main">
+		<div class="left">
+			<select id="selectGraph" required>
+				<option hidden>Select a Graph</option>
+				<option value="1"><label>Directed Graph</label></option>
+				<option value="0"><label>Undirected Graph</label></option>
+			</select>
+
+			<canvas id="myCanvas" width="800" height="600" style="border:1px solid black;"></canvas>
+
+			<div id="notes">
+				<label style="color: red">Current Node</label>
+				<label style="color: green">Neighbour Nodes</label>
+				<label style="color: blue">Visited Nodes</label>
+				<label style="font-size: 14px">(respect to current Node)</label>
+			</div>
+		</div>
+		<div class="right">
+			Starting Index : <input type="number" id="startingIndex">
+
+			<button onclick="CreateGraph()">Draw Graph</button>
+			<button onclick="animation()">Animation</button>
+
+			<div id="ans"></div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+
+
+		var number = 6;
+		var num = number+1;
+		var DFSresult;
+		var DFSanswer;
+		var index = -1;
+		var i1 = 0;
+
+		var nodes = [];
+		var nodelink = [];
+		var copynodelink = [];
+		
+		var antinodelink = [];
+		var visitednodelink = [];
+		
+		for(var i=0;i<number;i++)
+		{
+			nodelink[i] = []; 
+			copynodelink[i] = []; 
+			antinodelink[i] = [];
+			visitednodelink[i] = [];
+		}
+
+		class Graph 
+		{ 
+		    constructor(noOfVertices) 
+		    { 
+		        this.noOfVertices = noOfVertices; 
+		        this.AdjList = new Map(); 
+		    } 
+
+		    addVertex(v) 
+			{ 
+			    this.AdjList.set(v, []); 
+			} 
+
+			addEdge(v, w) 
+			{ 
+			    this.AdjList.get(v).push(w); 		 
+			    var select = document.getElementById("selectGraph");
+			   	if(select.value == 0)
+				{
+			    	this.AdjList.get(w).push(v); 
+				}
+			} 
+
+			printGraph() 
+			{ 		   
+			    var get_keys = this.AdjList.keys(); 
+			  	
+			    for (var i of get_keys)  
+				{ 					
+			        var get_values = this.AdjList.get(i); 
+			        var conc = ""; 
+			        for (var j of get_values) 
+			        {
+			            conc += j + " ";
+			        }
+			        //console.log(i + " -> " + conc); 
+			    } 
+			} 
+
+			dfs(startingNode) 
+			{ 
+				DFSresult = " ";
+				DFSanswer = " ";
+				index = -1;
+			    var visited = []; 
+			    for (var i = 1; i <= this.noOfVertices; i++) 
+			    {
+			    	visited[i] = false; 
+			    }
+			    this.DFSUtil(startingNode, visited);
+			    //index = -1;
+			    //var index = -1;
+			} 
+			  
+
+			DFSUtil(vert, visited) 
+			{ 		
+			    visited[vert] = true; 		    
+			    nodes[++index] = vert;
+
+			    DFSresult += (vert+" ");  
+			    //document.getElementById("ans").innerHTML += (vert+" ");  
+			    var get_neighbours = this.AdjList.get(vert); 			    
+
+			    DFSanswer += "<li>"+"Now, current Node is "+vert+".<br>"+"</li>";
+
+			    if(get_neighbours.length==0)
+			    {
+			    	DFSanswer += "<li>"+"Neighbours of current Node "+vert+" is not exist.<br>"+"</li>";	
+			    }
+			    var indices = -1;
+			    var index1 = -1;
+
+			    for (var i in get_neighbours) 
+			    {
+			    	var get_elem = get_neighbours[i];
+			        			    
+			        if(visited[get_elem]==false)
+			        {
+			        	DFSanswer += "<li>"+"Neighbours of current Node "+vert+" is "+get_elem+" which is not visited.<br>"+"</li>";
+			        }
+			        else
+			        {
+			        	DFSanswer += "<li>"+"Neighbours of current Node "+vert+" is "+get_elem+" which is visited.<br>"+"</li>";	
+			      		visitednodelink[index][++index1] = get_elem;
+			        }
+			        nodelink[index][++indices] = get_elem;
+			        copynodelink[index][indices] = get_elem;
+			        
+			        //console.log(index +" "+ (++indices));
+			        //console.log(nodes[index] +" -> "+ nodelink[index][indices]);
+			    }
+			    DFSanswer += "<br>";
+			    for (var i in get_neighbours) 
+			    { 
+			        var get_elem = get_neighbours[i]; 
+			        if (!visited[get_elem]) 
+			        {
+			            this.DFSUtil(get_elem, visited); 
+			        }
+			    } 
+			} 
+		}
+
+ 		var g = new Graph(number); 
+		var vertices = [ '1', '2', '3', '4', '5', '6' ];
+
+		var edges = [{v1:"1",v2:"2"},{v1:"1",v2:"3"},
+							{v1:"2",v2:"3"},{v1:"2",v2:"4"},
+							{v1:"3",v2:"4"},{v1:"3",v2:"5"},
+							{v1:"4",v2:"5"},{v1:"4",v2:"6"},
+							{v1:"5",v2:"6"}];
+			
+		function clearcontent(elementID) 
+		{ 
+	    	document.getElementById(elementID).innerHTML = ""; 
+	    } 
+
+	    var pos_array = new Array(num); 
+		for (var i = 0; i < num; i++) { 
+			pos_array[i] = []; 
+		}
+
+		function CreateGraph()
+		{	
+			i1 = 0;
+			var eLength = edges.length;
+
+			for (var i = 0; i < vertices.length; i++) { 
+			    g.addVertex(vertices[i]); 
+			}
+				
+				
+			var array = new Array(number);    		
+			for (var i = 0; i < number; i++) { 
+				array[i] = []; 
+			} 
+
+			for (var i = 0; i < eLength; i++) { 
+			    g.addEdge(edges[i]["v1"], edges[i]["v2"]); 
+			    array[ edges[i]["v1"]-1 ][ edges[i]["v2"]-1 ] = 1;
+			}
+
+			
+
+			clearcontent("ans");
+
+			//g.printGraph(); 	
+			var char1 = 49;	
+			var r = 200;
+			var R = 300;
+			var x_position = 400;				
+			var y_position = 300;				
+			var	inner_radius1 = 12;
+			var inner_radius2 = 15;
+
+			var p1 = new Array(number); 
+			for (var i = 0; i < number; i++) { 
+				p1[i] = []; 
+			} 
+
+			var p2 = new Array(number); 
+			for (var i = 0; i < number; i++) { 
+				p2[i] = []; 
+			}
+
+			var canvas = document.getElementById("myCanvas");
+			var context = canvas.getContext('2d');
+			context.clearRect(0,0,canvas.width,canvas.height);				
+				
+			var point = number;
+			var angles = 2*Math.PI/point;				
+				
+			for(var i=1;i<=point;i++) // positions of vertices
+			{
+				var angle;
+				angle = angles * i;				
+						
+				pos_array[i-1][0] = x_position + (r * Math.cos(angle));	
+				pos_array[i-1][1] = y_position + (r * Math.sin(angle));	
+					
+				var x = (x_position + (R * Math.cos(angle)));
+				var y = (y_position + (R * Math.sin(angle)));
+
+				var ang = 0.5 * Math.PI / 6;
+
+				p1[i-1][0] = (x_position + (R * Math.cos(angle-ang)));
+				p1[i-1][1] = (y_position + (R * Math.sin(angle-ang)));
+
+				p2[i-1][0] = (x_position + (R * Math.cos(angle+ang)));
+				p2[i-1][1] = (y_position + (R * Math.sin(angle+ang)));		
+			}
+
+			for (var i = 0; i < number; i++)  // edges
+			{ 
+				for (var j = 0; j < number; j++) 
+				{
+					if(array[i][j]==1)
+					{	
+						if(i==j)
+						{
+							var c1 = document.getElementById("myCanvas");
+							var ctx1 = c1.getContext("2d");
+							ctx1.beginPath();
+							ctx1.moveTo(pos_array[i][0], pos_array[i][1]);
+							ctx1.bezierCurveTo(p1[i][0] , p1[i][1], p2[i][0], p2[i][1] , pos_array[i][0], pos_array[i][1]);
+							ctx1.stroke();
+
+							var select = document.getElementById("selectGraph");
+
+							if(select.value == 1)
+							{
+								var angle1 = Math.atan((pos_array[j][1]-p1[i][1])/(pos_array[j][0]-p1[i][0]));
+									
+								var xa = pos_array[j][0] + inner_radius1 * Math.cos(angle1);
+								var ya = pos_array[j][1] + inner_radius1 * Math.sin(angle1);
+								var angle2 = Math.PI / 12;
+
+								var a1 = pos_array[j][0] + 20 * Math.cos(angle1-angle2);
+								var b1 = pos_array[j][1] + 20 * Math.sin(angle1-angle2);
+								var c1 = pos_array[j][0] + 20 * Math.cos(angle1+angle2);
+								var d1 = pos_array[j][1] + 20 * Math.sin(angle1+angle2);
+								var dist2 = Math.hypot(x_position - xa, y_position - ya);
+
+
+								if(dist2<200)
+								{
+									xa = pos_array[j][0] - inner_radius1 * Math.cos(angle1);
+									ya = pos_array[j][1] - inner_radius1 * Math.sin(angle1);
+									a1 = pos_array[j][0] - 20 * Math.cos(angle1-angle2);
+									b1 = pos_array[j][1] - 20 * Math.sin(angle1-angle2);
+									c1 = pos_array[j][0] - 20 * Math.cos(angle1+angle2);
+									d1 = pos_array[j][1] - 20 * Math.sin(angle1+angle2);
+								}							
+									
+								var c2 = document.getElementById("myCanvas");
+								var ctx2 = c2.getContext("2d");
+								ctx2.beginPath();		
+								ctx2.moveTo(xa,ya);
+								ctx2.lineTo(a1,b1);						
+								ctx2.lineTo(c1,d1);					
+								ctx2.fill();
+								ctx2.stroke();
+							}
+						}	
+						else
+						{
+							var c = document.getElementById("myCanvas");
+							var ctx1 = c.getContext("2d");
+							ctx1.beginPath();
+							ctx1.moveTo(pos_array[i][0],pos_array[i][1]);
+							ctx1.lineTo(pos_array[j][0],pos_array[j][1]);
+							ctx1.stroke();						
+
+							var select = document.getElementById("selectGraph");
+
+							if(select.value == 1)
+							{
+								var angle1 = Math.atan((pos_array[j][1]-pos_array[i][1])/(pos_array[j][0]-pos_array[i][0]));
+								var xa = pos_array[j][0] + inner_radius1 * Math.cos(angle1);
+								var ya = pos_array[j][1] + inner_radius1 * Math.sin(angle1);
+
+								var angle2 = Math.PI / 12;
+
+								var a1 = pos_array[j][0] + 20 * Math.cos(angle1-angle2);
+								var b1 = pos_array[j][1] + 20 * Math.sin(angle1-angle2);
+								var c1 = pos_array[j][0] + 20 * Math.cos(angle1+angle2);
+								var d1 = pos_array[j][1] + 20 * Math.sin(angle1+angle2);
+
+								var dist1 = Math.hypot(pos_array[j][0] - pos_array[i][0], pos_array[j][1] - pos_array[i][1]);
+								var dist2 = Math.hypot(pos_array[i][0] - xa, pos_array[i][1] - ya);
+
+								if(dist1 < dist2)
+								{
+									xa = pos_array[j][0] - inner_radius1 * Math.cos(angle1);
+									ya = pos_array[j][1] - inner_radius1 * Math.sin(angle1);				
+
+									a1 = pos_array[j][0] - 20 * Math.cos(angle1-angle2);
+									b1 = pos_array[j][1] - 20 * Math.sin(angle1-angle2);
+
+									c1 = pos_array[j][0] - 20 * Math.cos(angle1+angle2);
+									d1 = pos_array[j][1] - 20 * Math.sin(angle1+angle2);
+								}
+
+								var ctx2 = c.getContext("2d");
+								ctx2.beginPath();		
+								ctx2.moveTo(xa,ya);
+								ctx2.lineTo(a1,b1);						
+								ctx2.lineTo(c1,d1);					
+								ctx2.fill();
+								ctx2.stroke();
+							}
+						}
+					} 
+				}
+			}
+
+			for(var i=0;i<number;i++) //vertices
+			{
+				var x = pos_array[i][0];			
+				var y = pos_array[i][1];
+				var c = document.getElementById("myCanvas");
+				var ctx = c.getContext("2d");
+				ctx.beginPath();
+				ctx.arc(x, y, inner_radius1, 0, 2 * Math.PI);
+				ctx.fillStyle = 'white';
+				ctx.fill();
+				ctx.stroke();
+				ctx.beginPath();
+				ctx.font = inner_radius2+"px Verdana";				
+				ctx.fillStyle = 'black';
+				ctx.fillText(String.fromCharCode(char1), (x-5), (y+5));
+				char1++;
+
+				if(char1 == 91)
+				{
+					char1 = 97;		
+				}
+				else if(char1 == 123)
+				{
+					char1 = 48;				
+				}
+			}
+
+			//g.printGraph();
+			g.dfs(document.getElementById("startingIndex").value); 
+			
+			document.getElementById("ans").innerHTML = "DFS :"
+			document.getElementById("ans").innerHTML += DFSresult+"<br>";
+			document.getElementById("ans").innerHTML += "Starting Node is "+document.getElementById("startingIndex").value+".<br><br>";
+
+			document.getElementById("ans").innerHTML += "<ul>"
+			document.getElementById("ans").innerHTML += DFSanswer;
+			document.getElementById("ans").innerHTML += "</ul>"
+
+			/*for(var i=0;i<nodes.length;i++)
+			{
+				alert(nodes.length+" "+nodelink[i].length);
+			}*/
+
+		}
+
+		function StartNode(a,x,y)
+		{
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext('2d');
+			ctx.beginPath();
+			ctx.arc(x, y, 12, 0, 2 * Math.PI);
+			ctx.fillStyle = 'red';
+			ctx.fill();
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.font = "15px Verdana";				
+			ctx.fillStyle = 'white';
+			ctx.fillText(a, (x-5), (y+5));
+		} 
+
+		function NeighbourNode(a,x,y)
+		{		
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext('2d');
+			ctx.beginPath();
+			ctx.arc(x, y, 12, 0, 2 * Math.PI);
+			ctx.fillStyle = 'green';
+			ctx.fill();
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.font = "15px Verdana";				
+			ctx.fillStyle = 'white';
+			ctx.fillText(a, (x-5), (y+5));
+		} 
+
+		function NormalNode(a,x,y)
+		{		
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext('2d');
+			ctx.beginPath();
+			ctx.arc(x, y, 12, 0, 2 * Math.PI);
+			ctx.fillStyle = 'white';
+			ctx.fill();
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.font = "15px Verdana";				
+			ctx.fillStyle = 'black';
+			ctx.fillText(a, (x-5), (y+5));
+		} 
+
+		function VisitedNode(a,x,y)
+		{		
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext('2d');
+			ctx.beginPath();
+			ctx.arc(x, y, 12, 0, 2 * Math.PI);
+			ctx.fillStyle = 'blue';
+			ctx.fill();
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.font = "15px Verdana";				
+			ctx.fillStyle = 'white';
+			ctx.fillText(a, (x-5), (y+5));
+		} 
+
+		function differenceOf2Arrays (array1, array2) {
+			var temp = [];
+			array1 = array1.toString().split(',').map(Number);
+			array2 = array2.toString().split(',').map(Number);
+
+			for (var i in array1) {
+			if(array2.indexOf(array1[i]) === -1) temp.push(array1[i]);
+			}
+			for(i in array2) {
+			if(array1.indexOf(array2[i]) === -1) temp.push(array2[i]);
+			}
+			return temp.sort((a,b) => a-b);
+		}
+
+		
+
+		
+		
+		function animation()
+		{
+			document.getElementById("notes").style.display = "block";
+
+			if(nodelink[i1].length!=0)
+			{	
+				antinodelink[i1] = differenceOf2Arrays([1,2,3,4,5,6],nodelink[i1]);
+			}
+			else
+			{
+				antinodelink[i1] = [1,2,3,4,5,6];
+			}
+
+			antinodelink[i1] = differenceOf2Arrays(antinodelink[i1],nodes[i1]);
+
+			if(visitednodelink[i1].length!=0)
+			{
+				nodelink[i1] = differenceOf2Arrays(nodelink[i1],visitednodelink[i1]);	
+			}
+				
+				
+			StartNode(nodes[i1],pos_array[nodes[i1]-1][0],pos_array[nodes[i1]-1][1]);
+
+			console.log("Node "+nodes[i1]);
+			console.log("visited "+visitednodelink[i1]);
+			console.log("Normal Node "+antinodelink[i1]);
+			console.log("Neighbour Node "+nodelink[i1]);
+
+				
+			for(var i = 0; i< visitednodelink[i1].length; i++)
+			{
+				var a = visitednodelink[i1][i];
+				//console.log("Visited "+a);
+				VisitedNode(a, pos_array[a-1][0] , pos_array[a-1][1]);
+				//console.log("visited "+visitednodelink[i1][i]);
+			}
+			for(var j=0;j<antinodelink[i1].length;j++)
+			{
+				var a = antinodelink[i1][j];
+				//console.log("normal "+a);
+				NormalNode(a,pos_array[a-1][0],pos_array[a-1][1]);
+				//console.log("Normal Node "+antinodelink[i1]);
+			}
+
+			for(var j=0;j<nodelink[i1].length;j++)
+			{
+				var a = nodelink[i1][j];
+				//console.log("neighbour "+a);
+				NeighbourNode(a,pos_array[a-1][0],pos_array[a-1][1]);			
+				//console.log("Neighbour Node "+nodelink[i1]);
+			}
+
+			i1++;			
+
+			//alert(copynodelink.length);
+
+			if(i1>=nodes.length)
+			{	
+				i1 = 0;
+				antinodelink = [];
+				for(var i=0;i<number;i++)
+				{
+					antinodelink[i] = [];
+				} 
+
+				for(var i=0;i<copynodelink.length;i++)
+				{
+					nodelink[i]=copynodelink[i];
+				} 
+			}
+
+		}
+
+
+	</script>
+
+
+</body>
+</html>

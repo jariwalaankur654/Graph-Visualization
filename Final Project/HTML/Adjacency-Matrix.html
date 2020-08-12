@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Draw Graph</title>
+
+	<link rel="stylesheet" type="text/css" href="../CSS/Final.css">
+	<link rel="stylesheet" type="text/css" href="../CSS/Home.css">
+
+</head>
+<body>
+
+	<div class="top">
+		<div class="top-left">
+			<img src="../Img/icon.png">
+			<div class="text">Graph Visualization</div>
+		</div>
+		<div class="top-right">
+			<button type="button"  onclick="window.location.href='/project/HTML/about.html'">ABOUT</button>
+			<button type="button"  onclick="window.location.href='/project/HTML/Theory.html'">THEORY</button>
+			<button type="button"  onclick="window.location.href='/project/HTML/first.html'">HOME</button>
+		</div>
+	</div>
+
+
+	<div class="main">
+
+		<div class="main-left">
+			<div class="main-left-upper">
+
+				<select id="selectGraph" required>
+					<option hidden>Select a Graph</option>
+					<option value="1"><label>Directed Graph</label></option>
+					<option value="0"><label>Undirected Graph</label></option>
+				</select>
+
+				<br>
+
+				<div class="div-label">
+					<label>Note: An adjacency matrix is defined as follows: Let G be a graph with "n" vertices that are assumed to be ordered from v<sub>1</sub> to v<sub>n</sub>.<br>
+					The n x n matrix A, in which<br>
+					a<sub>ij</sub>= 1 if there exists a path from v<sub>i</sub> to v<sub>j</sub><br>
+					a<sub>ij</sub> = 0 otherwise<br>
+					is called an adjacency matrix.
+					</label>
+				</div>
+
+			</div>
+
+			<div class="main-left-bottom">
+
+				<div id="matrix">
+					<form>
+					<div id="row0">
+						<label id="f0-0">Rows</label>
+					</div>
+					</form>
+				</div>
+
+				<br>
+
+				<button onclick="CreateVertex()">Add Vertex</button>
+				<button onclick="RemoveVertex()">Remove Vertex</button>
+				<button onclick="CreateGraph()">Plot Graph</button>
+
+			</div>
+		</div>
+
+		<div class="main-right" id="main-right">
+			<div class="main-draw-area">
+				<canvas id="myCanvas" width="800" height="700" style="border:1px solid #d3d3d3;">
+				</canvas>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+
+		var char = 65;
+		var num = 1;
+  		var number = 0;
+
+		function CreateVertex(){
+
+			for(var i=0;i<=number;i++)
+    		{
+    			if( i == 0 )
+    			{
+    				var ch = document.createElement("LABEL");
+		        	ch.setAttribute("id","f"+i+"-"+num);
+		        	ch.innerHTML = String.fromCharCode(char);
+		        	document.getElementById("row"+i).appendChild(ch);
+		        	ch.style.margin = "2px";
+
+    			}
+    			else{
+    				var x = document.createElement("INPUT");
+        			x.setAttribute("type", "number");
+        			x.setAttribute("id","f"+i+"-"+(num));
+        			x.setAttribute("value",0);
+        			x.max = 1;
+        			x.min = 0;
+        			x.setAttribute("oninput","copyFunction(this)");
+        			document.getElementById("row"+i).appendChild(x);
+        			x.style.margin = "2px";
+    			}
+    		}
+
+			var y = document.createElement("DIV");
+			y.setAttribute("id", "row"+num);
+    		document.getElementById("matrix").appendChild(y);
+
+        	for(var j=0;j<=num;j++)
+		    {
+		    	if( j == 0 )
+    			{
+    				var ch = document.createElement("LABEL");
+		        	ch.setAttribute("id","f"+num+"-"+j);
+		        	ch.innerHTML = String.fromCharCode(char);
+		        	document.getElementById("row"+num).appendChild(ch);
+		        	ch.style.marginRight = "4px";
+    			}
+    			else
+    			{
+			        var z = document.createElement("INPUT");
+			        z.setAttribute("type", "number");
+			        z.setAttribute("id","f"+num+"-"+j);
+			        z.setAttribute("value",0);
+			        z.max = 1;
+        			z.min = 0;
+        			z.setAttribute("oninput","copyFunction(this)");
+			        document.getElementById("row"+num).appendChild(z);
+			        z.style.margin = "2px";
+			    }
+    		}
+
+        	char++;
+        	num++;
+    		number++;
+
+    		if(char == 91)
+    		{
+    			char = 97;
+    		}
+    		else if(char == 123)
+    		{
+    			char = 48;
+    		}
+
+			//alert(num+" "+number);
+		}
+
+		function RemoveVertex(){
+			if(num>2){
+				var row = document.getElementById("row"+(--num));
+				row.remove();
+				for(var i=0;i<number;i++)
+				{
+					var fid = document.getElementById("f"+i+"-"+number);
+					fid.remove();
+				}
+				number--;
+				char--;
+
+				if(char == 96)
+				{
+					char = 90;
+				}
+				else if(char == 47)
+				{
+					char = 122;
+				}
+
+
+			}
+
+			//alert(num+" "+number);
+		}
+
+		function copyFunction(element)
+		{
+			if(document.getElementById("selectGraph").value == 0)
+			{
+				var src = element.id;
+				var dest = src[0]+src[3]+src[2]+src[1];
+				document.getElementById(dest).value = document.getElementById(src).value;
+			}
+		}
+
+		function CreateGraph()
+		{
+			var char1 = 65;
+			var r = 200;
+			var R = 300;
+			var x_position = 400;
+			var y_position = 300;
+			var	inner_radius1 = 12;
+			var inner_radius2 = 15;
+
+			var pos_array = new Array(num);
+			for (var i = 0; i < num; i++) {
+				pos_array[i] = [];
+			}
+
+			var array = new Array(number);
+	   		for (var i = 0; i < number; i++) {
+				array[i] = [];
+			}
+
+			var p1 = new Array(number);
+			for (var i = 0; i < number; i++) {
+				p1[i] = [];
+			}
+
+			var p2 = new Array(number);
+			for (var i = 0; i < number; i++) {
+				p2[i] = [];
+			}
+
+			for (var i = 0; i < number; i++) {
+				for (var j = 0; j < number; j++) {
+				    array[i][j] = document.getElementById("f"+(i+1)+"-"+(j+1)).value;
+				}
+			}
+
+			var canvas = document.getElementById("myCanvas");
+			var context = canvas.getContext('2d');
+			context.clearRect(0,0,canvas.width,canvas.height);
+
+			var point = number;
+			var angles = 2*Math.PI/point;
+
+			for(var i=1;i<=point;i++)
+			{
+				var angle;
+				angle = angles * i;
+
+				pos_array[i-1][0] = x_position + (r * Math.cos(angle));
+				pos_array[i-1][1] = y_position + (r * Math.sin(angle));
+
+				var x = (x_position + (R * Math.cos(angle)));
+				var y = (y_position + (R * Math.sin(angle)));
+
+				var ang = 0.5 * Math.PI / 6;
+
+				p1[i-1][0] = (x_position + (R * Math.cos(angle-ang)));
+				p1[i-1][1] = (y_position + (R * Math.sin(angle-ang)));
+
+				p2[i-1][0] = (x_position + (R * Math.cos(angle+ang)));
+				p2[i-1][1] = (y_position + (R * Math.sin(angle+ang)));
+			}
+
+			for (var i = 0; i < number; i++)
+			{
+				for (var j = 0; j < number; j++)
+				{
+					if(array[i][j]==1)
+					{
+						if(i==j)
+						{
+							var c1 = document.getElementById("myCanvas");
+							var ctx1 = c1.getContext("2d");
+							ctx1.beginPath();
+							ctx1.moveTo(pos_array[i][0], pos_array[i][1]);
+							ctx1.bezierCurveTo(p1[i][0] , p1[i][1], p2[i][0], p2[i][1] , pos_array[i][0], pos_array[i][1]);
+							ctx1.stroke();
+
+							var select = document.getElementById("selectGraph");
+
+							if(select.value == 1)
+							{
+								var angle1 = Math.atan((pos_array[j][1]-p1[i][1])/(pos_array[j][0]-p1[i][0]));
+
+								var xa = pos_array[j][0] + inner_radius1 * Math.cos(angle1);
+								var ya = pos_array[j][1] + inner_radius1 * Math.sin(angle1);
+
+								var angle2 = Math.PI / 12;
+
+								var a1 = pos_array[j][0] + 20 * Math.cos(angle1-angle2);
+								var b1 = pos_array[j][1] + 20 * Math.sin(angle1-angle2);
+								var c1 = pos_array[j][0] + 20 * Math.cos(angle1+angle2);
+								var d1 = pos_array[j][1] + 20 * Math.sin(angle1+angle2);
+
+								var dist2 = Math.hypot(x_position - xa, y_position - ya);
+
+								//alert(dist2);
+
+								if(dist2<200)
+								{
+									xa = pos_array[j][0] - inner_radius1 * Math.cos(angle1);
+									ya = pos_array[j][1] - inner_radius1 * Math.sin(angle1);
+
+									a1 = pos_array[j][0] - 20 * Math.cos(angle1-angle2);
+									b1 = pos_array[j][1] - 20 * Math.sin(angle1-angle2);
+									c1 = pos_array[j][0] - 20 * Math.cos(angle1+angle2);
+									d1 = pos_array[j][1] - 20 * Math.sin(angle1+angle2);
+
+								}
+
+								var c2 = document.getElementById("myCanvas");
+								var ctx2 = c2.getContext("2d");
+								ctx2.beginPath();
+								ctx2.moveTo(xa,ya);
+								ctx2.lineTo(a1,b1);
+								ctx2.lineTo(c1,d1);
+								ctx2.fill();
+								ctx2.stroke();
+							}
+						}
+						else
+						{
+							var c = document.getElementById("myCanvas");
+							var ctx1 = c.getContext("2d");
+							ctx1.beginPath();
+							ctx1.moveTo(pos_array[i][0],pos_array[i][1]);
+							ctx1.lineTo(pos_array[j][0],pos_array[j][1]);
+							ctx1.stroke();
+
+							var select = document.getElementById("selectGraph");
+
+							if(select.value == 1)
+							{
+								var angle1 = Math.atan((pos_array[j][1]-pos_array[i][1])/(pos_array[j][0]-pos_array[i][0]));
+
+								var xa = pos_array[j][0] + inner_radius1 * Math.cos(angle1);
+								var ya = pos_array[j][1] + inner_radius1 * Math.sin(angle1);
+
+								var angle2 = Math.PI / 12;
+
+								var a1 = pos_array[j][0] + 20 * Math.cos(angle1-angle2);
+								var b1 = pos_array[j][1] + 20 * Math.sin(angle1-angle2);
+								var c1 = pos_array[j][0] + 20 * Math.cos(angle1+angle2);
+								var d1 = pos_array[j][1] + 20 * Math.sin(angle1+angle2);
+
+								var dist1 = Math.hypot(pos_array[j][0] - pos_array[i][0], pos_array[j][1] - pos_array[i][1]);
+
+								var dist2 = Math.hypot(pos_array[i][0] - xa, pos_array[i][1] - ya);
+
+								if(dist1 < dist2)
+								{
+									xa = pos_array[j][0] - inner_radius1 * Math.cos(angle1);
+									ya = pos_array[j][1] - inner_radius1 * Math.sin(angle1);
+
+									a1 = pos_array[j][0] - 20 * Math.cos(angle1-angle2);
+									b1 = pos_array[j][1] - 20 * Math.sin(angle1-angle2);
+
+									c1 = pos_array[j][0] - 20 * Math.cos(angle1+angle2);
+									d1 = pos_array[j][1] - 20 * Math.sin(angle1+angle2);
+								}
+
+								var ctx2 = c.getContext("2d");
+								ctx2.beginPath();
+								ctx2.moveTo(xa,ya);
+								ctx2.lineTo(a1,b1);
+								ctx2.lineTo(c1,d1);
+								ctx2.fill();
+								ctx2.stroke();
+							}
+						}
+					}
+				}
+			}
+
+			for(var i=0;i<number;i++)
+			{
+				var x = pos_array[i][0];
+
+				var y = pos_array[i][1];
+
+
+				var c = document.getElementById("myCanvas");
+				var ctx = c.getContext("2d");
+				ctx.beginPath();
+				ctx.arc(x, y, inner_radius1, 0, 2 * Math.PI);
+				ctx.fillStyle = 'white';
+				ctx.fill();
+				ctx.stroke();
+				ctx.beginPath();
+				ctx.font = inner_radius2+"px Verdana";
+				ctx.fillStyle = 'black';
+				ctx.fillText(String.fromCharCode(char1), (x-5), (y+5));
+				char1++;
+
+				if(char1 == 91)
+				{
+					char1 = 97;
+				}
+				else if(char1 == 123)
+				{
+					char1 = 48;
+				}
+			}
+
+
+		}
+
+
+
+	</script>
+
+</body>
+</html>

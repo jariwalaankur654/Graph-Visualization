@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Theory</title>
+	<link rel="stylesheet" type="text/css" href="../CSS/Theory.css">
+	<style type="text/css">
+		.main{
+
+		}
+
+		.parts{
+			margin: 30px;
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 800px;
+			height: 400px;
+			background: rgba(0,0,0,0.5);
+			border-radius: 30px;
+		}
+
+		.topic{
+			width: 100%;
+			height: 15%;
+			font-size: 32px;
+			text-align: center;
+			color: white;
+			padding: 10px;
+		}
+
+		.container{
+			width: 100%;
+			background: rgba(0,0,0,0.5);
+			height: 70%;
+		}
+
+		.container .image{
+			width: 30%;
+			float: left;
+			height: 100%;
+			position: relative;
+		}
+
+		.container .image img{
+			width: 100%;
+			height: auto;
+			padding: 20px;
+			position: absolute;
+	        top: 0;
+	        bottom: 0;
+	        left: 0;
+	        right: 0;
+	        margin: auto;
+		}
+
+		.container .data{
+			width: 70%;
+			float: left;
+			height: 100%;
+			text-align: justify;
+			padding: 20px;
+			padding-top: 40px;
+			color: white;
+			word-spacing: 2px;
+		}
+
+		#typeofgraph a:link{
+			color: white;
+			text-decoration: none;
+		}
+		#typeofgraph a:visited{
+			color: white;
+		}
+		#typeofgraph a:hover{
+			color: rgba(255,255,255,0.5);
+		}
+
+		@media screen and (max-width: 600px)
+		{
+			.topic{
+				font-size: 24px;
+			}
+			.container .data{
+				font-size: 14px;
+			}
+		}
+
+
+	</style>
+</head>
+<body>
+
+	<div class="top">
+		<div class="top-left">
+			<img src="../Img/Icon.png">
+			<div class="text">Graph Visualization</div>
+		</div>
+		<div class="top-right">
+			<button type="button"  onclick="window.location.href='/project/HTML/about.html'">ABOUT</button>
+			<button type="button"  onclick="window.location.href='/project/HTML/Theory.html'">THEORY</button>
+			<button type="button"  onclick="window.location.href='/project/HTML/first.html'">HOME</button>
+
+		</div>
+	</div>
+
+
+	<div class="main">
+		<div class="parts">
+			<div class="topic">
+				Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph1.png">
+				</div>
+				<div class="data">
+					<div>
+						A Graph is a general data type that is expected to complete the undirected graph and directed graph theories of the domain of graph theory in mathematics and various computer science ideas. A graph data structure consists of a limited set of vertices, concurrently with a set of unordered pairs of these vertices for an undirected graph or a set of ordered pairs for a directed graph. These pairs are known as edges, and for a directed graph are also known as arrows.
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="parts">
+			<div class="topic">
+				Types of Graphs
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph2.png">
+				</div>
+				<div class="data" style="padding: 0px;">
+					<ul id="typeofgraph" style="list-style-type: square;">
+						<a href="#simple_graph"><li style="padding: 5px;">Simple graph</li></a>
+						<a href="#undirected_graph"><li style="padding: 5px;">Undirected graph</li></a>
+						<a href="#directed_graph"><li style="padding: 5px;">Directed graphs</li></a>
+						<a href="#cyclic_graph"><li style="padding: 5px;">Cyclic graphs</li></a>
+						<a href="#acyclic_graph"><li style="padding: 5px;">Acyclic graphs</li></a>
+						<a href="#infinite_graph"><li style="padding: 5px;">Infinite graphs</li></a>
+						<a href="#finite_graph"><li style="padding: 5px;">Finite graphs</li></a>
+						<a href="#trivial_graph"><li style="padding: 5px;">Trivial graphs</li></a>
+						<a href="#complete_graph"><li style="padding: 5px;">Complete graphs</li></a>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<a id="simple_graph"><div class="parts">
+			<div class="topic">
+				Types of Graphs : Simple Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph3.png">
+				</div>
+				<div class="data">
+					A simple graph also pronounced a strict graph is unweighted, an undirected graph containing no graph circuits or many edges. A simple graph may be either connected or disconnected.
+					<ul style="padding: 0px;">
+						<li>The maximum number of edges possible in a single graph with ‘n’ vertices is <sup>n</sup>C<sub>2.</sub> <br>where <sup>n</sup>C<sub>2</sub> = n(n – 1)/2.</li>
+						<li>The number of simple graphs possible with ‘n’ vertices = 2<sup>n</sup>C<sub>2</sub> = 2n(n-1)/2.</li>
+					</ul>
+
+				</div>
+			</div>
+		</div></a>
+
+		<a id="undirected_graph"><div class="parts">
+			<div class="topic">
+				Types of Graph : Undirected Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph4.png">
+				</div>
+				<div class="data">
+					In an undirected graph, the position of the vertices and the pairs in the Edge set doesn't matter. Undirected graphs usually are drawn with straight lines between the vertices.
+					<br>
+					<br>
+					The adjacency relation is symmetric in an undirected graph, so if (v1,v2) then it is also the case that (v2,v1)
+
+				</div>
+			</div>
+		</div></a>
+
+		<a id="directed_graph"><div class="parts">
+			<div class="topic">
+				Types of Graphs : Directed Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph5.png">
+				</div>
+				<div class="data">
+					In a directed graph the position of the vertices and the pairs in the edge set matters. Thus v1 is adjacent to v2 only if the pair (v1,v2) is in the Edge set. For directed graphs, we usually use arrows for the arcs between vertices. An arrow from v1 to v2 is drawn only if (v1,v2) is in the Edge set.
+				</div>
+			</div>
+		</div></a>
+
+		<a id="cyclic_graph"><div class="parts">
+			<div class="topic">
+				Types of Graph : Cyclic Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph6.png">
+				</div>
+				<div class="data">
+					A cyclic graph is a directed graph with at least one cycle. A cycle is a path along the directed edges from a vertex to itself. The vertex labeled graph above as several cycles.
+				</div>
+			</div>
+		</div></a>
+
+		<a id="acyclic_graph"><div class="parts">
+			<div class="topic">
+				Types of Graphs : Acyclic Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph7.png">
+				</div>
+				<div class="data">
+					An acyclic graph is a graph having no graph cycles. Acyclic graphs are bipartite.A connected acyclic graph is known as a tree, and a possibly disconnected acyclic graph is known as a forest.
+				</div>
+			</div>
+		</div></a>
+
+		<a id="infinite_graph"><div class="parts">
+			<div class="topic">
+				Types of Graph : Infinite Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph8.png">
+				</div>
+				<div class="data">
+					A graph is said to be infinite if it has infinite number of vertices as well as infinite number of edges.
+				</div>
+			</div>
+		</div></a>
+
+		<a id="finite_graph"><div class="parts">
+			<div class="topic">
+				Types of Graph : Finite Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph11.png">
+				</div>
+				<div class="data">
+					A graph is said to be finite if it has finite number of vertices and finite number of edges.
+				</div>
+			</div>
+		</div></a>
+
+		<a id="trivial_graph"><div class="parts">
+			<div class="topic">
+				Types of Graphs : Trivial Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph9.png">
+				</div>
+				<div class="data">
+					A graph is said to be trivial if a finite graph contains only one vertex and no edge.
+				</div>
+			</div>
+		</div></a>
+
+		<a id="complete_graph"><div class="parts">
+			<div class="topic">
+				Types of Graph : Complete Graph
+			</div>
+			<div class="container">
+				<div class="image">
+					<img src="../Img/graph10.png">
+				</div>
+				<div class="data">
+
+					In the area of graph theory, a complete graph is a simple undirected graph in which every two distinct vertices are connected by a unique edge. A complete digraph is a directed graph in which every pair of distinct vertices is connected by a set of different edges (unit in each direction).
+					<br><br>
+					Vertices : n
+					<br>
+					Edges : n(n-1)/2
+					<br>
+					Notation : K<sub>n</sub>
+
+				</div>
+			</div>
+		</div></a>
+
+	</div>
+
+</body>
+</html>
